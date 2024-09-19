@@ -11,6 +11,7 @@ interface IInpunt {
 type IOutput = void;
 
 export class SignUpUseCase {
+  constructor(private readonly salt: number) {}
   async execute({ email, name, password }: IInpunt): Promise<IOutput> {
     const accountAlreadyExists = await prismaClient.account.findUnique({
       where: {
@@ -22,7 +23,7 @@ export class SignUpUseCase {
       throw new AccountAlreadyExists();
     }
 
-    const hasgedPassword = await hash(password, 12);
+    const hasgedPassword = await hash(password, this.salt);
 
     await prismaClient.account.create({
       data: {
