@@ -5,6 +5,8 @@ import { routeAdapter } from "./adapters/routeAdapter";
 import { makeSignUpController } from "../factories/makeSignUpController";
 import { makeSignInController } from "../factories/makeSignInController";
 import { makeListLeadsController } from "../factories/makeListLeadsController";
+import { middlewareAdapter } from "./adapters/middlewareAdapterr";
+import { makeAuthenticationMiddleware } from "../factories/makeAuthenticationMiddleware";
 
 const app = express();
 
@@ -15,15 +17,7 @@ app.post("/sign-in", routeAdapter(makeSignInController()));
 
 app.get(
   "/leads",
-  (request, response, next) => {
-    const authorization = request.headers.authorization;
-
-    if (!authorization) {
-      return response.sendStatus(401);
-    }
-
-    next();
-  },
+  middlewareAdapter(makeAuthenticationMiddleware()),
   routeAdapter(makeListLeadsController())
 );
 

@@ -1,8 +1,7 @@
-import { IController, IRequest, IResponse } from "../interfaces/IController";
+import { IController, IResponse } from "../interfaces/IController";
 
 export class ListLeadsController implements IController {
-  async handle(request: IRequest): Promise<IResponse> {
-    console.log({ request });
+  async handle(): Promise<IResponse> {
     return {
       statusCode: 200,
       body: {

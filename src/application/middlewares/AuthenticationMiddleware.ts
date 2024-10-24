@@ -1,9 +1,11 @@
+import { env } from "../config/env";
 import {
   IData,
   IMiddleware,
   IRequest,
   IResponse,
 } from "../interfaces/IMiddleware";
+import { verify } from "jsonwebtoken";
 
 export class AuthenticationMiddleware implements IMiddleware {
   async handle({ headers }: IRequest): Promise<IResponse | IData> {
@@ -12,16 +14,33 @@ export class AuthenticationMiddleware implements IMiddleware {
     if (!authorization) {
       return {
         statusCode: 401,
-        body: null,
+        body: {
+          error: "Invalid credentials.",
+        },
       };
     }
 
-    return {
-      data: {
+    try {
+      const [bearer, token] = authorization.split(" ");
+
+      if (bearer !== "Bearer") {
+        throw new Error();
+      }
+
+      const payload = verify(token, env.jwtSecret);
+
+      return {
         data: {
-          accountId: "123",
+          accountId: payload.sub,
         },
-      },
-    };
+      };
+    } catch {
+      return {
+        statusCode: 401,
+        body: {
+          error: "Invalid credentials.",
+        },
+      };
+    }
   }
 }
