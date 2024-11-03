@@ -21,6 +21,12 @@ app.get(
   routeAdapter(makeListLeadsController())
 );
 
+app.post(
+  "/leads",
+  middlewareAdapter(makeAuthenticationMiddleware()),
+  routeAdapter(makeListLeadsController())
+);
+
 app.listen(3001, () => {
   console.log("Server started at http://localhost:3001");
 });
