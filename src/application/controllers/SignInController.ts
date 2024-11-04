@@ -1,7 +1,8 @@
-import { IController, IRequest, IResponse } from "../interfaces/IController";
+import { IController, IResponse } from "../interfaces/IController";
 import { z, ZodError } from "zod";
 import { SignInUseCase } from "../useCases/SignInUseCase";
 import { InvalidCredentials } from "../errors/InvalidCredentials";
+import { IRequest } from "../interfaces/IRequest";
 
 const shema = z.object({
   password: z.string().min(8),

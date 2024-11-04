@@ -5,7 +5,8 @@ export function routeAdapter(controller: IController) {
   return async (request: Request, response: Response) => {
     const { body, statusCode } = await controller.handle({
       body: request.body,
-      accountId: request.metadata?.account?.id,
+      headers: request.headers as Record<string, string>,
+      account: request.metadata?.account,
     });
 
     response.status(statusCode).json(body);
