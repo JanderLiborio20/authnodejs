@@ -35,3 +35,11 @@ model Permission {
 
   @@map("permissions")
 }
+
+model RolePermission {
+  roleId         String @map("role_id") @db.Uuid
+  permissionCode String @map("permission_code")
+
+  @@id([roleId, permissionCode])
+  @@map("roles_permissions")
+}
